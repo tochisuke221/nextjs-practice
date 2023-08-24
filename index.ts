@@ -31,3 +31,21 @@ console.log(object1.str) // => undefined
 // Rubyでいうぼっち演算子
 let obj: any = undefined;
 obj?.test //=> undefinedとなる
+
+// オブジェクトを代入した変数は常に参照として振る舞う
+
+const obj1 = {
+  key1: 1,
+  key2: 'string'
+}
+
+obj1.key1 = 3
+
+const obj2 = obj1
+
+obj2.key2 = 'string2'
+
+console.log(obj1)
+//=> { key1: 3, key2: 'string2' }
+
+
