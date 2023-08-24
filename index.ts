@@ -1,7 +1,17 @@
-function hoge(arg: number): string {
-  return String(arg)
-}
 
-console.log(hoge(10000))
 
-export {};
+let anyVariable: any = 1
+anyVariable = 'string'
+anyVariable = true
+
+// エラーにならない
+let numberVariable: number = anyVariable;
+
+
+let unkwon: unknown = -1;
+
+// エラーになる
+numberVariable = unkwon
+
+// ■ まとめ
+// anyは型チェックが入らない
