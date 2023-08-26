@@ -54,15 +54,27 @@ const aryNums: number[] = [0, 1, 2]
 const aryStrings: string[] = ['str1', 'str2']
 
 // 普通type使わね？
-const objeArgFunc = (arg: {
-  strVal: 'string'
-}): boolean => {
-  if(arg.strVal == 'string1'){
+// const objeArgFunc = (arg: {
+//   strVal: 'string'
+// }): boolean => {
+//   if(arg.strVal === "str1"){
+//     return true;
+//   }
+
+//   return false
+// }
+
+type ArgumentType = {
+  strVal: string;
+};
+
+const objeArgFunc = (arg: ArgumentType): boolean => {
+  if (arg.strVal === "str1") {
     return true;
   }
 
-  return false
-}
+  return false;
+};
 
 // ジェネリクス
 const genericFunc = <T>(arg: T): T => {
@@ -76,7 +88,7 @@ genericFunc('string')
 genericFunc(123) 
 
 // 型もジェネリックにできる
-type Generic<T>{
+type Generic<T> = {
   value: T
 }
 
