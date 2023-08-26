@@ -1,14 +1,22 @@
-import React, { useState, useMemo } from 'react';
-import logo from './logo.svg';
+import React, { useState, useCallback, FunctionComponent } from 'react';
 import './App.css';
+
+
+const DisplayResult: FunctionComponent <{
+  findValue: (query: string) => string;
+  query: string;
+}> = ({findValue, query}) => {
+  return <div>{findValue(query)}</div>
+}
 
 function App() {
   const [inputValue, setInputValue] = useState<string>('default value')
 
-  const reversedValue = useMemo(
-    () => {
-      console.log("再計算")
-      return inputValue.split('').reverse().join('');
+  const findValue = useCallback(
+    (query: string) => {
+      return inputValue.indexOf(query) === -1
+      ? `${query} not found`
+      : `${query} found`
     },
     [inputValue]
   )
@@ -21,7 +29,9 @@ function App() {
           setInputValue(e.target.value);
         }}
       />
-      <div>{reversedValue}</div>
+      <DisplayResult findValue={findValue} query="hoge"/>
+      <DisplayResult findValue={findValue} query="fuga"/>
+
     </div>
   );
 }
