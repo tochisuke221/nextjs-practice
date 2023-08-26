@@ -1,28 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
 function App() {
   const [inputValue, setInputValue] = useState<string>('default value')
-  const [response, setResponse] = useState<Response | null>(null)
 
-
-  useEffect(
+  const reversedValue = useMemo(
     () => {
-      const controller = new AbortController();
-      fetch('api/data/list', {
-        body: JSON.stringify({inputValue}),
-        signal: controller.signal
-      }).then( res => {
-        setResponse(res)
-      });
-
-      return () => {
-        controller.abort()
-      }
+      console.log("再計算")
+      return inputValue.split('').reverse().join('');
     },
     [inputValue]
   )
+
   return (
     <div className="App">
       <input
@@ -31,6 +21,7 @@ function App() {
           setInputValue(e.target.value);
         }}
       />
+      <div>{reversedValue}</div>
     </div>
   );
 }
