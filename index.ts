@@ -116,3 +116,58 @@ type ExcludeUnionType = Exclude<UnionType, 'a' | 'b'>
 // 'c'
 type ExtractUnionType = Extract<UnionType, 'a' | 'b'>
 // 'a' | 'b'
+
+type ObjType = {
+  key1: 'value1',
+  3: 'value3'
+}
+
+type ObjectkeyType = keyof ObjType
+// 'key1' | 3
+
+const objFunction = (
+  object: ObjType,
+  key: keyof ObjType
+) => {
+  return object[key]
+}
+
+objFunction(
+  {
+    key1: 'value1',
+    3: 'value3'
+  },
+  'key1'
+)
+
+const object = {
+  key3: 1,
+  key4:2
+}
+
+type ObjectKey = keyof typeof object 
+
+// プロパティを任意の文字列や数値にできる
+type StringkeyType = {
+  [k: string]: string;
+}
+
+const attributeKey: StringkeyType = {
+  anyString:'string'
+}
+
+type UnionKeyObj = {
+  [k in UnionType]: number;
+}
+
+type ObjTypeKeyType = {
+  [k in keyof ObjType]: number;
+}
+
+const object3: ObjTypeKeyType = {
+  key1: 1,
+  3: 3
+}
+
+
+
