@@ -8,9 +8,31 @@ const notion = new Client({
 
 export const getStaticProps: GetStaticProps<{}> = async () => {
     const database = await notion.databases.query({
-      database_id: process.env.NOTION_DATABASE_ID || ''
+      database_id: process.env.NOTION_DATABASE_ID || '',
+      filter: {
+        and: [
+          {
+            property: 'Published',
+            checkbox: {
+              equals: true
+            }
+          }
+        ]
+      },
+      sorts: [
+        {
+          timestamp: 'created_time',
+          direction: 'descending'
+        }
+      ]
+    });
+
+    const blocks = await notion.blocks.children.list({
+      block_id: database.results[0]?.id
     })
-    
+
+    console.log(blocks)
+
     return {
       props: {}
     }
