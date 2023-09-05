@@ -149,9 +149,10 @@ export const getStaticProps: GetStaticProps<StaticProps> = async () => {
     }
 };
 
-const Home: NextPage<StaticProps> = props => {
-  console.log(props)
-  return <div></div>;
+const Home: NextPage<StaticProps> = ({post}) => {
+  if(!post) return null;
+
+  return <div>{post.title}</div>;
 }
 
 export default Home;
