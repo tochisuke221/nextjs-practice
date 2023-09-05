@@ -1,5 +1,6 @@
 import { Client } from '@notionhq/client';
 import { NextPage, GetStaticProps } from 'next';
+import styles from '../styles/Home.module.css'
 
 export type Content =
   {
