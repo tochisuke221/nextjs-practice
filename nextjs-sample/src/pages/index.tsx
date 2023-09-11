@@ -67,86 +67,85 @@ export const getStaticProps: GetStaticProps<StaticProps> = async () => {
       })
     )
     
-    database.results.forEach((index, page) => {
-      console.dir(page)
-    }
-    )
-    database.results.forEach((index, page) => {
-      console.dir(page)
-      // if(!('properties' in page)) {
-      //   posts.push({
-      //    id: page.id,
-      //    title: null,
-      //    slug: null,
-      //    createdTs: null,
-      //    lastEditedTs: null,
-      //    contents: []
-      //   })
-      // }
+    
+    database.results.forEach((page, index) => {
+      if(!('properties' in page)) {
+        posts.push({
+         id: page.id,
+         title: null,
+         slug: null,
+         createdTs: null,
+         lastEditedTs: null,
+         contents: []
+        })
 
-      // let title: string | null = null
+        
+        return;
+      }
 
-      // if(page.properties['Name'].type === 'title'){
-      //   title = page.properties['Name'].title[0]?.plain_text ?? null ;
-      // }
+      let title: string | null = null
+
+      if(page.properties['Name'].type === 'title'){
+        title = page.properties['Name'].title[0]?.plain_text ?? null ;
+      }
   
-      // let slug: string | null  = null;
+      let slug: string | null  = null;
    
-      // if(page.properties['Slug'].type === 'rich_text') {
-      //   slug = page.properties['Slug'].rich_text[0]?.plain_text ?? null ;
-      // }
+      if(page.properties['Slug'].type === 'rich_text') {
+        slug = page.properties['Slug'].rich_text[0]?.plain_text ?? null ;
+      }
   
-      // const blocks = blockResponses[index];
+      const blocks = blockResponses[index];
   
-      // const contents: Content[] = [];
+      const contents: Content[] = [];
   
-      // blocks.results.forEach(block => {
-      //  if(!('type' in block)){
-      //    return;
-      //  }
+      blocks.results.forEach(block => {
+       if(!('type' in block)){
+         return;
+       }
   
-      //  switch(block.type){
-      //    case 'paragraph':
-      //      contents.push({
-      //        type: 'paragraph',
-      //        text: block.paragraph.rich_text[0]?.plain_text ?? null
-      //      });
-      //      break;
-      //    case 'heading_2':
-      //       contents.push({
-      //         type: 'heading_2',
-      //         text: block.heading_2.rich_text[0]?.plain_text ?? null
-      //       });
-      //       break;
-      //    case 'heading_3':
-      //       contents.push({
-      //         type: 'heading_3',
-      //         text: block.heading_3.rich_text[0]?.plain_text ?? null
-      //       });
-      //       break;
-      //    case 'quote':
-      //       contents.push({
-      //         type: 'heading_3',
-      //         text: block.quote.rich_text[0]?.plain_text ?? null
-      //       });
-      //       break;
-      //    case 'code':
-      //       contents.push({
-      //         type: 'code',
-      //         text: block.code.rich_text[0]?.plain_text ?? null,
-      //         language: block.code.language
-      //       });
-      //  }
-      // });
+       switch(block.type){
+         case 'paragraph':
+           contents.push({
+             type: 'paragraph',
+             text: block.paragraph.rich_text[0]?.plain_text ?? null
+           });
+           break;
+         case 'heading_2':
+            contents.push({
+              type: 'heading_2',
+              text: block.heading_2.rich_text[0]?.plain_text ?? null
+            });
+            break;
+         case 'heading_3':
+            contents.push({
+              type: 'heading_3',
+              text: block.heading_3.rich_text[0]?.plain_text ?? null
+            });
+            break;
+         case 'quote':
+            contents.push({
+              type: 'heading_3',
+              text: block.quote.rich_text[0]?.plain_text ?? null
+            });
+            break;
+         case 'code':
+            contents.push({
+              type: 'code',
+              text: block.code.rich_text[0]?.plain_text ?? null,
+              language: block.code.language
+            });
+       }
+      });
   
-      // posts.push({
-      //   id: page.id,
-      //   title,
-      //   slug,
-      //   createdTs: page.created_time,
-      //   lastEditedTs: page.last_edited_time,
-      //   contents
-      // })
+      posts.push({
+        id: page.id,
+        title,
+        slug,
+        createdTs: page.created_time,
+        lastEditedTs: page.last_edited_time,
+        contents
+      })
     })
 
     return {
