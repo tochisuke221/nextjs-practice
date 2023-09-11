@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 
 export type Content =
   {
-    type: | 'paragraph' 
+    type: | 'paragraph'
           | 'quote'
           | 'heading_2'
           | 'heading_3';
@@ -30,7 +30,7 @@ export type Post = {
 };
 
 type StaticProps = {
-  post: Post | null;
+  posts: []
 }
 
 const notion = new Client({
@@ -58,98 +58,87 @@ export const getStaticProps: GetStaticProps<StaticProps> = async () => {
       ]
     });
 
-    const page = database.results[0];
+    const posts: Post[] = [];
 
-    if(!page){
-      return {
-        props: {
-          post: null
-        }
-      }
-    }
-    if(!('properties' in page)) {
-      return {
-        props: {
+    for(const page of database.results) {
+      if(!('properties' in page)) {
+         posts.push({
           id: page.id,
           title: null,
           slug: null,
           createdTs: null,
           lastEditedTs: null,
           contents: []
+         });
+         continue;
         }
       }
-    }
+  
+      let title: string | null = null
 
-    let title: string | null = null
-
-
-    if(page.properties['Name'].type === 'title'){
-      title = page.properties['Name'].title[0]?.plain_text ?? null ;
-    }
-    
-    let slug: string | null  = null;
-    
-    if(page.properties['Slug'].type === 'rich_text') {
-      slug = page.properties['Slug'].rich_text[0]?.plain_text ?? null ;
-    }
-
-    const blocks = await notion.blocks.children.list({
-      block_id: database.results[0]?.id
-    })
-
-    const contents: Content[] = [];
-
-    blocks.results.forEach(block => {
-      if(!('type' in block)){
-        return;
+      if(page.properties['Name'].type === 'title'){
+        title = page.properties['Name'].title[0]?.plain_text ?? null ;
       }
-
-      switch(block.type){
-        case 'paragraph':
-          contents.push({
-            type: 'paragraph',
-            text: block.paragraph.rich_text[0]?.plain_text ?? null
-          });
-          break;
-        case 'heading_2':
-           contents.push({
-             type: 'heading_2',
-             text: block.heading_2.rich_text[0]?.plain_text ?? null
-           });
-           break;
-        case 'heading_3':
-           contents.push({
-             type: 'heading_3',
-             text: block.heading_3.rich_text[0]?.plain_text ?? null
-           });
-           break;
-        case 'quote':
-           contents.push({
-             type: 'heading_3',
-             text: block.quote.rich_text[0]?.plain_text ?? null
-           });
-           break;
-        case 'code':
-           contents.push({
-             type: 'code',
-             text: block.code.rich_text[0]?.plain_text ?? null,
-             language: block.code.language
-           });
+      
+      let slug: string | null  = null;
+      
+      if(page.properties['Slug'].type === 'rich_text') {
+        slug = page.properties['Slug'].rich_text[0]?.plain_text ?? null ;
       }
-    })
+  
+      const blocks = await notion.blocks.children.list({
+        block_id: database.results[0]?.id
+      })
+  
+      const contents: Content[] = [];
+  
+      blocks.results.forEach(block => {
+        if(!('type' in block)){
+          return;
+        }
+  
+        switch(block.type){
+          case 'paragraph':
+            contents.push({
+              type: 'paragraph',
+              text: block.paragraph.rich_text[0]?.plain_text ?? null
+            });
+            break;
+          case 'heading_2':
+             contents.push({
+               type: 'heading_2',
+               text: block.heading_2.rich_text[0]?.plain_text ?? null
+             });
+             break;
+          case 'heading_3':
+             contents.push({
+               type: 'heading_3',
+               text: block.heading_3.rich_text[0]?.plain_text ?? null
+             });
+             break;
+          case 'quote':
+             contents.push({
+               type: 'heading_3',
+               text: block.quote.rich_text[0]?.plain_text ?? null
+             });
+             break;
+          case 'code':
+             contents.push({
+               type: 'code',
+               text: block.code.rich_text[0]?.plain_text ?? null,
+               language: block.code.language
+             });
+        }
+      });
 
-    const post: Post = {
-      id: page.id,
-      title,
-      slug,
-      createdTs: page.created_time,
-      lastEditedTs: page.last_edited_time,
-      contents
-    };
-
-
-    return {
-      props: { post }
+      posts.push({
+        id: page.id,
+        title,
+        slug,
+        createdTs: page.created_time,
+        lastEditedTs: page.last_edited_time,
+        contents
+      })
     }
 };
 
