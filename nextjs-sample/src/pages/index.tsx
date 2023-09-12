@@ -5,6 +5,8 @@ import styles from '../styles/Home.module.css'
 import prism from 'prismjs';
 import dayjs from 'dayjs';
 import { QueryDatabaseResponse } from '@notionhq/client/build/src/api-endpoints';
+import Link from 'next/link'
+
 
 export type Content =
   {
@@ -292,28 +294,34 @@ const Home: NextPage<StaticProps> = ({posts}) => {
       className={styles.wrapper}
     >
       {posts.map((post)=> (
-        <div className={styles.post}>
-        <h1 className={styles.title}>{post.title}</h1>
-        <div className={styles.timestampWrapper}>
-          <div>
-            <div className={styles.timestamp}>
-              作成日時:{' '}
-              {
-                dayjs(post.createdTs).format(
-                  'YYYY-MM-DD HH:mm:ss'
-                )
-              }
-            </div>
-            <div className={styles.timestamp}>
-              更新日時:{' '}
-              {
-                dayjs(post.lastEditedTs).format(
-                  'YYYY-MM-DD HH:mm:ss'
-                )
-              }
+        <div className={styles.post} key={post.id}>
+          <h1 className={styles.title}>
+            <Link
+              href={`/post/${encodeURIComponent(post.slug ?? '')}`}
+            >
+              {post.title}
+            </Link>
+          </h1>
+          <div className={styles.timestampWrapper}>
+            <div>
+              <div className={styles.timestamp}>
+                作成日時:{' '}
+                {
+                  dayjs(post.createdTs).format(
+                    'YYYY-MM-DD HH:mm:ss'
+                  )
+                }
+              </div>
+              <div className={styles.timestamp}>
+                更新日時:{' '}
+                {
+                  dayjs(post.lastEditedTs).format(
+                    'YYYY-MM-DD HH:mm:ss'
+                  )
+                }
+              </div>
             </div>
           </div>
-        </div>
         <div>
           {post.contents.map((content, index) => {
             const key = `${post.id}_${index}`;
