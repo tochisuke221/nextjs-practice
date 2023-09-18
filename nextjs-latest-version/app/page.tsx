@@ -8,7 +8,7 @@ const Home = async () => {
 
   return (
     <div>
-      <Search />
+      <Search randomPhotos={randomPhotos}/>
     </div>
   )
 }
