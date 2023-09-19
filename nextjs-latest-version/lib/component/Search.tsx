@@ -47,25 +47,36 @@ export const Search: FunctionComponent<{
                 <button
                     className="bg-gray-700 py-2 px-4"
                     onClick={async ()=> {
-                        setSearching(true);
+                        try {
+                            setSearching(true);
                         
-                        const response = await fetch(
-                            'http://localhost:3001//api/search',
-                            {
-                                method: 'POST',
-                                body: JSON.stringify({
-                                    query
-                                }),
-                                headers: {
-                                    'Content-Type': 'application/json'
+                            const response = await fetch(
+                                'http://localhost:3001//api/search',
+                                {
+                                    method: 'POST',
+                                    body: JSON.stringify({
+                                        query
+                                    }),
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    }
                                 }
+                            )
+
+                            if(!response.ok) {
+                                throw response;
                             }
-                        )
-                        const json: PhotoSearchResponse = await response.json()
-                        startTransition(()=>{
-                            setSearchedPhotos(json.results);
-                        });
-                        setSearching(false)
+
+                            const json: PhotoSearchResponse = await response.json()
+                            startTransition(()=>{
+                                setSearchedPhotos(json.results);
+                            });
+                        } catch {
+                            alert('検索ちゅにエラーが発生しました')
+                        } finally {
+                            setSearching(false)
+                        }
+                        
                     }}
                 >
                     <VscSearch/>
