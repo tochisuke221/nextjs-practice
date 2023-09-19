@@ -72,7 +72,7 @@ export const Search: FunctionComponent<{
                                 setSearchedPhotos(json.results);
                             });
                         } catch {
-                            alert('検索ちゅにエラーが発生しました')
+                            alert('検索中にエラーが発生しました')
                         } finally {
                             setSearching(false)
                         }

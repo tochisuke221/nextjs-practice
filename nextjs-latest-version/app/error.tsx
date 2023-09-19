@@ -13,7 +13,7 @@ const Error: FunctionComponent<{
 
     return (
         <div className="w-60 mx-auto py-12">
-            <div classNmae="text-2xl font-bold mb-4">
+            <div className="text-2xl font-bold mb-4">
                 エラーが発生しました
             </div>
             <div className="text-center">
